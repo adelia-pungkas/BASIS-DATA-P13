@@ -1,0 +1,19 @@
+cara gampang untuk bikin database lebih aman di MySQL. Kita pakai beberapa perintah untuk mengatur hak akses user supaya tidak semua orang bisa sembarangan pakai database.
+
+
+1. Bikin User Baru + Hak Akses
+A.  tambah user baru dan kasih izin akses
+GRANT <izin> ON <database>.<tabel> TO '<user>'@'<host>' IDENTIFIED BY '<password>';
+
+B. ngecek user punya izin apa ajA
+SHOW GRANTS FOR '<user>'@'<host>';
+
+C. ubah pasword
+SET PASSWORD FOR '<user>'@'<host>' = PASSWORD('<password_baru>');
+
+D. Cabut hak akses user
+REVOKE <izin> ON <database>.<tabel> FROM '<user>'@'<host>';
+
+Kesimpulan
+Dengan perintah-perintah ini, dapat ngatur siapa yang boleh akses database dan ngapain aja. 
+
