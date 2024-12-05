@@ -1,0 +1,85 @@
+Latar Belakang
+Sebuah perusahaan e-commerce ingin melindungi database mereka yang berisi data sensitif, seperti informasi pelanggan, detail transaksi, dan informasi login pengguna. Ancaman seperti SQL Injection, pencurian data, dan serangan pada jaringan menjadi perhatian utama.
+
+Rancangan Sistem Keamanan Basis Data
+1. Tujuan Keamanan
+Melindungi data pelanggan dari pencurian.
+Mencegah akses tidak sah ke database.
+Menjaga integritas dan ketersediaan data.
+2. Komponen Keamanan
+Hak Akses Pengguna:
+
+Membatasi akses hanya untuk pengguna yang berwenang.
+Memberikan hak sesuai peran (admin, staf, pelanggan).
+Enkripsi Data:
+
+Menggunakan enkripsi untuk data sensitif saat penyimpanan dan pengiriman.
+Firewall dan IDS/IPS:
+
+Mencegah akses dari IP tak dikenal dan memantau aktivitas jaringan.
+Pencatatan dan Pemantauan:
+
+Merekam semua aktivitas dalam database untuk mendeteksi anomali.
+Backup dan Recovery:
+
+Menyediakan backup harian untuk memastikan data dapat dipulihkan.
+Implementasi Sistem Keamanan Basis Data
+1. Hak Akses Pengguna
+Buat user dengan hak akses terbatas sesuai tugasnya:
+
+-- Membuat user untuk admin
+CREATE USER 'admin_user'@'localhost' IDENTIFIED BY 'Admin@123';
+
+-- Memberikan hak akses penuh ke admin
+GRANT ALL PRIVILEGES ON ecommerce_db.* TO 'admin_user'@'localhost';
+
+-- Membuat user untuk pelanggan dengan hak akses terbatas
+CREATE USER 'customer_user'@'%' IDENTIFIED BY 'Customer@123';
+
+-- Memberikan hak akses hanya untuk membaca data
+GRANT SELECT ON ecommerce_db.orders TO 'customer_user'@'%';
+2. Enkripsi Data
+Gunakan fungsi enkripsi bawaan untuk data sensitif:
+
+
+-- Menyimpan data dengan enkripsi
+INSERT INTO users (username, password) 
+VALUES ('user1', AES_ENCRYPT('password123', 'encryption_key'));
+
+-- Membaca data terenkripsi
+SELECT username, AES_DECRYPT(password, 'encryption_key') AS decrypted_password FROM users;
+3. Mendeteksi Aktivitas Mencurigakan
+Pasang pemantauan log dan query:
+
+
+-- Aktifkan general log di MySQL
+SET GLOBAL general_log = 'ON';
+SET GLOBAL log_output = 'TABLE';
+
+-- Cek log aktivitas
+SELECT * FROM mysql.general_log WHERE argument LIKE '%DROP%';
+4. Pencegahan SQL Injection
+Gunakan parameterized query di aplikasi:
+
+
+import mysql.connector
+
+conn = mysql.connector.connect(host='localhost', user='user', password='pass', database='ecommerce_db')
+cursor = conn.cursor()
+
+# Query dengan parameter
+query = "SELECT * FROM users WHERE username = %s AND password = %s"
+cursor.execute(query, ('username1', 'password123'))
+5. Backup Otomatis
+Gunakan cron job untuk backup:
+
+
+# Backup harian
+0 2 * * * mysqldump -u admin_user -p'Admin@123' ecommerce_db > /backup/ecommerce_db_$(date +\%F).sql
+Hasil Implementasi
+Keamanan Data: Hak akses terbatas berhasil mencegah akses yang tidak sah.
+Integritas Data: Enkripsi memastikan data sensitif terlindungi bahkan jika database bocor.
+Pemantauan: Log aktivitas mendeteksi query mencurigakan.
+Pemulihan: Backup otomatis menjamin data tetap aman meski terjadi gangguan.
+Kesimpulan
+Sistem keamanan ini menjaga kerahasiaan, integritas, dan ketersediaan data dengan memadukan pengaturan hak akses, enkripsi, pemantauan aktivitas, dan backup. 
