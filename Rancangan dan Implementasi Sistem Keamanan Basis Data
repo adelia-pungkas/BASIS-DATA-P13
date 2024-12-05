@@ -1,0 +1,72 @@
+1. Tujuan Sistem
+Melindungi database dari ancaman pencurian, kehilangan data, atau penyusupan.
+Menjaga kerahasiaan, integritas, dan ketersediaan data pada RDBMS.
+2. Rancangan Pola Keamanan
+Berdasarkan studi kasus, pola rancangan keamanan database yang diterapkan adalah sebagai berikut:
+
+Tahap Rancangan
+Keamanan Server dan Infrastruktur:
+
+Perlindungan Server: Server harus memiliki pembatasan akses fisik dan virtual. Server yang berisi database wajib memiliki firewall, IDS/IPS, dan log pengamanan.
+Trusted IP Access: Mengonfigurasi alamat IP yang diizinkan untuk mengakses server database.
+Pengaturan Hak Akses Pengguna:
+
+Penggunaan perintah GRANT untuk memberikan izin akses hanya pada pengguna yang sah.
+Contoh Perintah SQL:
+
+GRANT SELECT, INSERT ON database_name.* TO 'user1'@'192.168.1.100' IDENTIFIED BY 'password123';
+Enkripsi dan Validasi Data:
+
+Data sensitif dienkripsi selama penyimpanan dan transmisi.
+Input pengguna divalidasi untuk mencegah serangan SQL Injection.
+Contoh Implementasi:
+Enkripsi data menggunakan MD5, SHA256, atau library enkripsi bawaan database.
+Sanitasi input dengan menggunakan parameterized query.
+Pemantauan Aktivitas:
+
+Memasang alat monitoring (misal: log query, audit trail).
+Menentukan deteksi dini untuk aktivitas mencurigakan.
+Backup dan Recovery:
+
+Backup otomatis dilakukan setiap hari untuk menghindari kehilangan data.
+File backup disimpan di lokasi terpisah dengan akses terbatas.
+Pembaruan Sistem dan Patch:
+
+Selalu memperbarui patch keamanan sistem operasi server dan DBMS.
+Memastikan konfigurasi default diganti dengan pengaturan khusus yang lebih aman.
+Tahap Implementasi
+Konfigurasi RDBMS:
+
+Setup database dengan parameter keamanan, seperti:
+Mengaktifkan SSL/TLS untuk koneksi.
+Memblok port database yang tidak digunakan.
+Pengaturan User dan Password:
+
+Menggunakan password kompleks untuk semua user.
+Contoh Perintah:
+
+ALTER USER 'user1'@'192.168.1.100' IDENTIFIED BY 'StrongPassw0rd!';
+Penerapan Kontrol Akses:
+
+Membatasi akses berdasarkan tabel, kolom, atau level data lainnya.
+Contoh:
+
+REVOKE UPDATE ON database_name.* FROM 'user1'@'192.168.1.100';
+Pemeriksaan Keamanan:
+
+Audit mingguan dilakukan dengan memeriksa log database.
+Gunakan alat seperti Snort atau tcpdump untuk mendeteksi anomali jaringan.
+Simulasi Serangan:
+
+Uji sistem keamanan dengan simulasi serangan (misal: SQL Injection atau DDOS).
+Contoh simulasi SQL Injection:
+
+SELECT * FROM users WHERE username = 'admin' --' AND password = '';
+Hasil Implementasi
+Sistem keamanan berhasil diterapkan pada RDBMS dengan fitur:
+
+Hak akses granular sesuai pengguna.
+Data dienkripsi selama pengiriman.
+Sistem dapat mendeteksi dan memblokir aktivitas mencurigakan.
+Data tetap tersedia dengan dukungan backup otomatis.
+Kesimpulan: RDBMS yang dirancang memiliki tingkat keamanan tinggi dengan pola kontrol akses, enkripsi, monitoring, dan backup yang memadai.
